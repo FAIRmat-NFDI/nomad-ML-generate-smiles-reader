@@ -178,9 +178,9 @@ for i, molecule_data in enumerate(data):
     # multipoles parsing
     total_dipole = molecule_data.get('MSVAMP_TotalDipole')
     if total_dipole is not None:
-        multipole_moment = MultipoleMoment(value=total_dipole * ureg('dimensionless'))
+        multipole_moment = MultipoleMoment(value=total_dipole * ureg('debye'))
         multipole_moment.value_dipole = (
-            molecule_data.get('MSVAMP_DipoleMoment') * ureg('dimensionless')
+            molecule_data.get('MSVAMP_DipoleMoment') * ureg('debye')
             if molecule_data.get('MSVAMP_DipoleMoment') is not None
             else None
         )
@@ -217,7 +217,7 @@ for i, molecule_data in enumerate(data):
         section = VibrationalModes(
             n_modes=len(vibrational_modes),
             value=vibrational_modes,
-            frequency=molecule_data.get('MSVAMP_VibrationalFrequency') * ureg('THz')
+            frequency=molecule_data.get('MSVAMP_VibrationalFrequency') * ureg('1/cm')
             if molecule_data.get('MSVAMP_VibrationalFrequency') is not None
             else None,
             reduced_mass=molecule_data.get('MSVAMP_VibrationalReducedMass')
