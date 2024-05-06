@@ -99,7 +99,7 @@ class GapEnergy(PhysicalProperty):
     value_homo = Quantity(
         type=np.float64,
         shape=[],
-        unit='eV',  # confirmed units
+        unit='joule',  # confirmed units 'eV'
         description="""
         Highest occupied molecular orbital value.
         """,
@@ -108,7 +108,7 @@ class GapEnergy(PhysicalProperty):
     value_lumo = Quantity(
         type=np.float64,
         shape=[],
-        unit='eV',  # confirmed units
+        unit='joule',  # confirmed units 'eV'
         description="""
         Lowest unoccupied molecular orbital value.
         """,
@@ -117,7 +117,7 @@ class GapEnergy(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='eV',  # confirmed units
+        unit='joule',  # confirmed units 'eV'
         description="""
         Value of the gap of energies. This is calculated as the difference `value_homo - value_lumo`; if the
         `value` is negative, we don't set it.
@@ -206,7 +206,7 @@ class MultipoleMoment(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='coulomb / meter',  # confirmed units 'debye'
+        unit='coulomb * meter',  # confirmed units 'debye'
         description="""
         Value of the total dipole moment of the system.
         """,
@@ -215,7 +215,7 @@ class MultipoleMoment(PhysicalProperty):
     value_dipole = Quantity(
         type=np.float64,
         shape=[3],
-        unit='coulomb / meter',  # confirmed units 'debye'
+        unit='coulomb * meter',  # confirmed units 'debye'
         description="""
         Value of the X,Y,Z component of the dipole moment vector of the system.
         """,

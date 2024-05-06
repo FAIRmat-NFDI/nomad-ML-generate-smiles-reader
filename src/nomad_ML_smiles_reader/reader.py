@@ -154,7 +154,8 @@ for i, molecule_data in enumerate(data):
     for label, property in energy_map.items():
         energy = molecule_data.get(f'MSVAMP_{property.m_def.name}')
         if energy is not None:
-            property.value = energy * ureg('kcal/mol')
+            cal_value = energy * 4184.0  # convert from kcal/mol to joule/mol
+            property.value = (cal_value / ureg.avogadro_number) * ureg('joule')
             setattr(outputs, label, property)
     # gap energy parsing
     homo = molecule_data.get('MSVAMP_HOMOEnergy')
@@ -173,7 +174,8 @@ for i, molecule_data in enumerate(data):
     for label, property in capacity_map.items():
         capacity = molecule_data.get(f'MSVAMP_{property.m_def.name}')
         if capacity is not None:
-            property.value = capacity * ureg('cal/K/mol')
+            cal_value = capacity * 4184.0  # convert from kcal/K/mol to J/K/mol
+            property.value = (cal_value / ureg.avogadro_number) * ureg('J/K')
             setattr(outputs, label, property)
     # multipoles parsing
     total_dipole = molecule_data.get('MSVAMP_TotalDipole')

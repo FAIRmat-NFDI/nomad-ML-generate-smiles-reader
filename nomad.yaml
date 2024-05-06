@@ -3,7 +3,8 @@ normalize:
     include:
       - MetainfoNormalizer
 plugins:
-  include: 'schemas/nomad_ML_smiles_reader'
+  include:
+    - 'schemas/nomad_ML_smiles_reader'
   options:
     schemas/nomad_ML_smiles_reader:
       python_package: nomad_ML_smiles_reader
