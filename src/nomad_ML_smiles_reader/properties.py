@@ -45,7 +45,7 @@ class TotalEnergy(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='kcal/mol',  # confirmed units
+        unit='joule',  # confirmed units: 'kcal/mol'
         description="""
         Total energy from semiempirical VAMP calculation. This value is dependent on the basis selected
         and should not be used as an absolute value. Difference between Electronic Energy and Repulsive Energy.
@@ -59,7 +59,7 @@ class ElectronicEnergy(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='kcal/mol',  # confirmed units
+        unit='joule',  # confirmed units: 'kcal/mol'
         description="""
         Electron energy from semiempirical VAMP calculation. This value is dependent on the basis selected.
         """,
@@ -72,7 +72,7 @@ class RepulsiveEnergy(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='kcal/mol',  # confirmed units
+        unit='joule',  # confirmed units: 'kcal/mol'
         description="""
         Repulsive Energy from semiempirical VAMP calculation. This is the core-core repulsion energy. This value
         is depednent on the basis selected.
@@ -86,7 +86,7 @@ class IonizationPotential(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='kcal/mol',  # confirmed units
+        unit='joule',  # confirmed units: 'kcal/mol'
         description="""
         Ionization Potential from semiempirical VAMP calculation.
         """,
@@ -137,7 +137,7 @@ class HeatOfFormation(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='kcal/mol',  # confirmed units
+        unit='joule',  # confirmed units: 'kcal/mol'
         description="""
         Heat of Formation. A fundamental inconsistency inherent in the parameterization of semiempirical methods to
         reproduce heats of formation. The energy calculated by VAMP is the internal energy of a hypothetical
@@ -150,13 +150,63 @@ class HeatOfFormation(PhysicalProperty):
     )
 
 
+class Enthalpy(PhysicalProperty):
+    """ """
+
+    value = Quantity(
+        type=np.float64,
+        shape=[],
+        unit='joule',  # confirmed units 'kcal/mol'
+        description="""
+        Enthalpy at 298K. Thermodynamics calculations yield enthalpy changes between the Born-Oppenheimer
+        state and the temperature in question. A fictitious Born-Oppenheimer energy is used in thermodynamics calculations.
+        The best procedure is simply to ignore the "heat of formation" and to calculate thermodynamic quantities for
+        reactions based on the Born-Oppenheimer energy and the calculated enthalpy changes, as for ab initio calculations.
+        The electronic contribution is determined based on ideal gas apprximation. The vibrational contribution is determined
+        based on vibrational calculation and equation found in Hirano et al.,1993.
+        """,
+    )
+
+
+class Entropy(PhysicalProperty):
+    """ """
+
+    value = Quantity(
+        type=np.float64,
+        shape=[],
+        unit='joule / K',  # confirmed units 'cal/K/mol'
+        description="""
+        Entropy at 298K.Thermodynamics calculations yield entropy changes between the Born-Oppenheimer
+        state and the temperature in question. A fictitious Born-Oppenheimer energy is used in thermodynamics calculations.
+        The best procedure is simply to ignore the "heat of formation" and to calculate thermodynamic quantities for
+        reactions based on the Born-Oppenheimer energy and the calculated entropy changes, as for ab initio calculations.
+        The vibrational contribution is determined based on vibrational calculation and equation found in Hirano et al.,1993.
+        """,
+    )
+
+
+class HeatCapacity(PhysicalProperty):
+    """ """
+
+    value = Quantity(
+        type=np.float64,
+        shape=[],
+        unit='joule / K',  # confirmed units 'cal/K/mol'
+        description="""
+        Heat capacity at 298K for both Electronic and Vibrational Contribution. The heat capacity is calculated at constant
+        pressure, Cp, based on the ideal gas for the translational and rotational terms. Vibrational contribution is calculated
+        based on the vibrational calculation and equation found in Hirano et al.,1993.
+        """,
+    )
+
+
 class MultipoleMoment(PhysicalProperty):
     """ """
 
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='debye',  # confirmed units
+        unit='coulomb / meter',  # confirmed units 'debye'
         description="""
         Value of the total dipole moment of the system.
         """,
@@ -165,7 +215,7 @@ class MultipoleMoment(PhysicalProperty):
     value_dipole = Quantity(
         type=np.float64,
         shape=[3],
-        unit='debye',  # confirmed units
+        unit='coulomb / meter',  # confirmed units 'debye'
         description="""
         Value of the X,Y,Z component of the dipole moment vector of the system.
         """,
@@ -190,63 +240,13 @@ class MultipoleMoment(PhysicalProperty):
     # )
 
 
-class Enthalpy(PhysicalProperty):
-    """ """
-
-    value = Quantity(
-        type=np.float64,
-        shape=[],
-        unit='kcal/mol',  # confirmed units
-        description="""
-        Enthalpy at 298K. Thermodynamics calculations yield enthalpy changes between the Born-Oppenheimer
-        state and the temperature in question. A fictitious Born-Oppenheimer energy is used in thermodynamics calculations.
-        The best procedure is simply to ignore the "heat of formation" and to calculate thermodynamic quantities for
-        reactions based on the Born-Oppenheimer energy and the calculated enthalpy changes, as for ab initio calculations.
-        The electronic contribution is determined based on ideal gas apprximation. The vibrational contribution is determined
-        based on vibrational calculation and equation found in Hirano et al.,1993.
-        """,
-    )
-
-
-class Entropy(PhysicalProperty):
-    """ """
-
-    value = Quantity(
-        type=np.float64,
-        shape=[],
-        unit='cal/K/mol',  # confirmed units
-        description="""
-        Entropy at 298K.Thermodynamics calculations yield entropy changes between the Born-Oppenheimer
-        state and the temperature in question. A fictitious Born-Oppenheimer energy is used in thermodynamics calculations.
-        The best procedure is simply to ignore the "heat of formation" and to calculate thermodynamic quantities for
-        reactions based on the Born-Oppenheimer energy and the calculated entropy changes, as for ab initio calculations.
-        The vibrational contribution is determined based on vibrational calculation and equation found in Hirano et al.,1993.
-        """,
-    )
-
-
-class HeatCapacity(PhysicalProperty):
-    """ """
-
-    value = Quantity(
-        type=np.float64,
-        shape=[],
-        unit='cal/K/mol',  # confirmed units
-        description="""
-        Heat capacity at 298K for both Electronic and Vibrational Contribution. The heat capacity is calculated at constant
-        pressure, Cp, based on the ideal gas for the translational and rotational terms. Vibrational contribution is calculated
-        based on the vibrational calculation and equation found in Hirano et al.,1993.
-        """,
-    )
-
-
 class ZeroPointEnergy(PhysicalProperty):
     """ """
 
     value = Quantity(
         type=np.float64,
         shape=[],
-        unit='kcal/mol',  # confirmed units
+        unit='joule',  # confirmed units 'kcal/mol'
         description="""
         Zero point energy.
         """,
@@ -283,7 +283,7 @@ class ElectronicLevels(PhysicalProperty):
     value = Quantity(
         type=np.float64,
         shape=['n_levels'],
-        unit='eV',  # confirmed units
+        unit='joule',  # confirmed units 'eV'
         description="""
         Electronic transition energy.
         """,
@@ -292,7 +292,7 @@ class ElectronicLevels(PhysicalProperty):
     value_wavelength = Quantity(
         type=np.float64,
         shape=['n_levels'],
-        unit='nm',  # confirmed units
+        unit='meter',  # confirmed units 'nm'
         description="""
         Electronic transition in wavelength.
         """,
@@ -310,7 +310,6 @@ class ElectronicLevels(PhysicalProperty):
     transition_type = Quantity(
         type=np.int32,
         shape=['n_levels'],
-        unit='dimensionless',  # confirmed units
         description="""
         Transition type of the electronic level. For example, 1 for singlet and 3 for triplet. Singlet state
         is a state with all electron spins paired. Triplet state is a state with two unpaired electrons.
@@ -340,7 +339,7 @@ class VibrationalModes(PhysicalProperty):
     frequency = Quantity(
         type=np.float64,
         shape=['n_modes'],
-        unit='1/cm',  # confirmed units
+        unit='Hz',  # confirmed units '1/cm'
         description="""
         Vibrational modes inverse wavelength, which is proportional to the frequency.
         """,
@@ -379,7 +378,7 @@ class VibrationalSpectrum(PhysicalProperty):
     frequency = Quantity(
         type=np.float64,
         shape=['n_frequencies'],
-        unit='1/cm',  # confirmed units
+        unit='Hz',  # confirmed units '1/cm'
         description="""
         Vibrational modes inverse wavelength, which is proportional to the frequency.
         """,
