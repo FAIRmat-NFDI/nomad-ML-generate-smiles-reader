@@ -148,13 +148,14 @@ for i, molecule_data in enumerate(data):
         'repulsive_energy': RepulsiveEnergy(),
         'ionization_potential': IonizationPotential(),
         'enthalpy': Enthalpy(),
-        'entropy': Entropy(),
         'zero_point_energy': ZeroPointEnergy(),
+        'heat_of_formation': HeatOfFormation(),
     }
     for label, property in energy_map.items():
         energy = molecule_data.get(f'MSVAMP_{property.m_def.name}')
         if energy is not None:
-            property.value = energy * ureg.eV
+            cal_value = energy * 4184.0  # convert from kcal/mol to joule/mol
+            property.value = (cal_value / ureg.avogadro_number) * ureg('joule')
             setattr(outputs, label, property)
     # gap energy parsing
     homo = molecule_data.get('MSVAMP_HOMOEnergy')
@@ -167,20 +168,21 @@ for i, molecule_data in enumerate(data):
         outputs.gap_energy = gap_energy
     # heat capacities parsing
     capacity_map = {
-        'heat_of_formation': HeatOfFormation(),
         'heat_capacity': HeatCapacity(),
+        'entropy': Entropy(),
     }
     for label, property in capacity_map.items():
         capacity = molecule_data.get(f'MSVAMP_{property.m_def.name}')
         if capacity is not None:
-            property.value = capacity * ureg('kcal/mol')
+            cal_value = capacity * 4184.0  # convert from kcal/K/mol to J/K/mol
+            property.value = (cal_value / ureg.avogadro_number) * ureg('J/K')
             setattr(outputs, label, property)
     # multipoles parsing
     total_dipole = molecule_data.get('MSVAMP_TotalDipole')
     if total_dipole is not None:
-        multipole_moment = MultipoleMoment(value=total_dipole * ureg('dimensionless'))
+        multipole_moment = MultipoleMoment(value=total_dipole * ureg('debye'))
         multipole_moment.value_dipole = (
-            molecule_data.get('MSVAMP_DipoleMoment') * ureg('dimensionless')
+            molecule_data.get('MSVAMP_DipoleMoment') * ureg('debye')
             if molecule_data.get('MSVAMP_DipoleMoment') is not None
             else None
         )
@@ -217,9 +219,6 @@ for i, molecule_data in enumerate(data):
         section = VibrationalModes(
             n_modes=len(vibrational_modes),
             value=vibrational_modes,
-            frequency=molecule_data.get('MSVAMP_VibrationalFrequency') * ureg('THz')
-            if molecule_data.get('MSVAMP_VibrationalFrequency') is not None
-            else None,
             reduced_mass=molecule_data.get('MSVAMP_VibrationalReducedMass')
             * ureg('dimensionless')
             if molecule_data.get('MSVAMP_VibrationalReducedMass') is not None
@@ -229,6 +228,9 @@ for i, molecule_data in enumerate(data):
             if molecule_data.get('MSVAMP_VibrationalRamanIntensity') is not None
             else None,
         )
+        if molecule_data.get('MSVAMP_VibrationalFrequency') is not None:
+            wavenumber = molecule_data.get('MSVAMP_VibrationalFrequency') * ureg('1/cm')
+            section.frequency = (ureg.speed_of_light * wavenumber).to('Hz')
         outputs.vibrational_modes = section
     # vibrational spectrum parsing
     vibrational_spectrum_intensities = molecule_data.get(
